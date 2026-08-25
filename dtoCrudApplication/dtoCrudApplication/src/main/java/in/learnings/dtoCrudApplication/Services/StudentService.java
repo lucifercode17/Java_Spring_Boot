@@ -1,6 +1,7 @@
 package in.learnings.dtoCrudApplication.Services;
 
 import in.learnings.dtoCrudApplication.Enitity.Student;
+import in.learnings.dtoCrudApplication.Exception.ResourceNotFound;
 import in.learnings.dtoCrudApplication.dto.CreateStudentResponedto;
 import in.learnings.dtoCrudApplication.dto.UpdateStudentReqDto;
 import in.learnings.dtoCrudApplication.dto.UpdateStudentResDto;
@@ -28,15 +29,11 @@ public class StudentService {
     }
 
     public CreateStudentResponedto getStudent(Long id) {
-        Optional<Student> student = studentrepository.findByIdAndDeletedFalse(id);
+        Student student = studentrepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFound("no data found for "+ id +"student id "));
 
-
-
-        if(student.isPresent()){
-            return mapToDto(student.get());
-        }
-        return null;
-
+        return mapToDto(student);
     }
 
     public List<CreateStudentResponedto> GetallStudent() {
@@ -46,21 +43,22 @@ public class StudentService {
                 .toList();
     }
 
+
+
     public UpdateStudentResDto updateStudent(Long id, UpdateStudentReqDto updateStudentReqDto) {
-        Optional<Student> existingStudent = studentrepository.findByIdAndDeletedFalse(id);
+        Student existingStudent = studentrepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow()
 
-        if(existingStudent.isPresent()){
-            Student saveToStudent = existingStudent.get();
-            saveToStudent.setName(updateStudentReqDto.getName());
 
-            saveToStudent.setRoll(updateStudentReqDto.getRoll());
-            saveToStudent.setSubject(updateStudentReqDto.getSubject());
-            saveToStudent.setAge(updateStudentReqDto.getAge());
-            Student updatedStudent = studentrepository.save(saveToStudent);
 
-            return mapToUpdatedDto(updatedStudent);
-        }
-        return null;
+        existingStudent.setName(updateStudentReqDto.getName());
+
+        existingStudent.setRoll(updateStudentReqDto.getRoll());
+        existingStudent.setSubject(updateStudentReqDto.getSubject());
+        existingStudent.setAge(updateStudentReqDto.getAge());
+        Student updatedStudent = studentrepository.save(existingStudent);
+
     }
 
 

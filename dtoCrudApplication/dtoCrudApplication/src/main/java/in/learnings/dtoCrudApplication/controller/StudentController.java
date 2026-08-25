@@ -32,10 +32,6 @@ public class StudentController {
     @GetMapping("get")
     public ResponseEntity<CreateStudentResponedto> getStudent(@RequestParam Long id){
         CreateStudentResponedto studentResp = studentService.getStudent(id);
-
-        if(studentResp == null){
-            return ResponseEntity.status(404).body(null);
-        }
         return ResponseEntity.ok(studentResp);
     }
     @GetMapping("getAll")
