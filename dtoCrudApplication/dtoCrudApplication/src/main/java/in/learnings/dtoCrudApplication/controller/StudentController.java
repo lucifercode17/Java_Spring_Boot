@@ -6,6 +6,7 @@ import in.learnings.dtoCrudApplication.dto.CreateStudentRequestDTO;
 import in.learnings.dtoCrudApplication.dto.CreateStudentResponedto;
 import in.learnings.dtoCrudApplication.dto.UpdateStudentReqDto;
 import in.learnings.dtoCrudApplication.dto.UpdateStudentResDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class StudentController {
 
 
     @PostMapping()
-    public ResponseEntity<CreateStudentResponedto> createStudent(@RequestBody CreateStudentRequestDTO createStudentRequestDTO){
+    public ResponseEntity<CreateStudentResponedto> createStudent(@Valid @RequestBody CreateStudentRequestDTO createStudentRequestDTO){
         CreateStudentResponedto createdStudent = studentService.createStudent(createStudentRequestDTO);
         return ResponseEntity.status(201).body(createdStudent);
 
