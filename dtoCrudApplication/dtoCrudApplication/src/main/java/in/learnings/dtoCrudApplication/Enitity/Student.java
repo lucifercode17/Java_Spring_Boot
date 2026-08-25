@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,7 +16,7 @@ public class Student {
 
     private String name;
     private int age;
-    private String Email;
+    private String email;
     private int Roll;
     private String Subject;
     private Boolean deleted;
@@ -49,11 +48,11 @@ public class Student {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getSubject() {

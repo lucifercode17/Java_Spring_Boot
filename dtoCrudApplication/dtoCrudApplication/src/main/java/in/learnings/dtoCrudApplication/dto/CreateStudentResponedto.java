@@ -7,7 +7,7 @@ public class CreateStudentResponedto {
 
     private String name;
     private int age;
-    private String Email;
+    private String email;
     private int Roll;
     private String Subject;
     private String message;
@@ -39,11 +39,11 @@ public class CreateStudentResponedto {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public int getRoll() {

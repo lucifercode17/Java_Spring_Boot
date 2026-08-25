@@ -8,7 +8,7 @@ public class UpdateStudentResDto {
     private String name;
     private int age;
     private int Roll;
-    private String Email;
+    private String email;
     private String Subject;
     private String message;
     private LocalDateTime createdAt;
@@ -79,10 +79,10 @@ public class UpdateStudentResDto {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 }

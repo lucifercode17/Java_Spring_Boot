@@ -1,6 +1,7 @@
 package in.learnings.dtoCrudApplication.Services;
 
 import in.learnings.dtoCrudApplication.Enitity.Student;
+import in.learnings.dtoCrudApplication.Exception.DuplicateConflict;
 import in.learnings.dtoCrudApplication.Exception.ResourceNotFound;
 import in.learnings.dtoCrudApplication.dto.CreateStudentResponedto;
 import in.learnings.dtoCrudApplication.dto.UpdateStudentReqDto;
@@ -11,8 +12,6 @@ import in.learnings.dtoCrudApplication.dto.CreateStudentRequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -23,18 +22,28 @@ public class StudentService {
     }
 
     public CreateStudentResponedto createStudent(CreateStudentRequestDTO studentReqdto){
+
        Student student = mapToEntity(studentReqdto);
+        System.out.println(emailExist(student));
+        if(emailExist(student)){
+
+            throw new DuplicateConflict("this email " +student.getEmail() +" exists");
+        }
        Student studentResp = studentrepository.save(student);
        return mapToDto(studentResp);
     }
 
-    public CreateStudentResponedto getStudent(Long id) {
+    public CreateStudentResponedto getStudent(Long id) throws DuplicateConflict {
         Student student = studentrepository
                 .findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new ResourceNotFound("no data found for "+ id +"student id "));
+                .orElseThrow(() -> new ResourceNotFound("no record found "));
+
+
 
         return mapToDto(student);
     }
+
+
 
     public List<CreateStudentResponedto> GetallStudent() {
         List<Student> studentList = studentrepository.findByDeletedFalse();
@@ -48,42 +57,30 @@ public class StudentService {
     public UpdateStudentResDto updateStudent(Long id, UpdateStudentReqDto updateStudentReqDto) {
         Student existingStudent = studentrepository
                 .findByIdAndDeletedFalse(id)
-                .orElseThrow()
-
+                .orElseThrow(() -> new ResourceNotFound("no record found "));
 
 
         existingStudent.setName(updateStudentReqDto.getName());
-
         existingStudent.setRoll(updateStudentReqDto.getRoll());
         existingStudent.setSubject(updateStudentReqDto.getSubject());
         existingStudent.setAge(updateStudentReqDto.getAge());
         Student updatedStudent = studentrepository.save(existingStudent);
+        return mapToUpdatedDto(updatedStudent);
 
     }
 
 
 
-    public Boolean deleteStudent(Long id) {
-        boolean isStudent = studentrepository.existsById(id);
-
-        if(!isStudent) return false;
-
-        studentrepository.deleteById(id);
-
-        return true;
+    public void deleteStudent(Long id) {
+         studentrepository.findById(id).orElseThrow(() -> new ResourceNotFound("no record found to delete"));
+         studentrepository.deleteById(id);
 
     }
 
-    public Boolean softDelete(Long id){
-        Optional<Student> existingStudent = studentrepository.findByIdAndDeletedFalse(id);
-        if(existingStudent.isEmpty()){
-            return false;
-        }
-        Student saveToStudent = existingStudent.get();
-
-        saveToStudent.setDeleted(true);
-        studentrepository.save(saveToStudent);
-        return true;
+    public void softDelete(Long id){
+        Student existingStudent = studentrepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new ResourceNotFound("no record found for soft delete "));
+        existingStudent.setDeleted(true);
+        studentrepository.save(existingStudent);
 
     }
     private Student mapToEntity(CreateStudentRequestDTO createStudentRequestDTO){
@@ -130,6 +127,9 @@ public class StudentService {
 
         return  response;
 
+    }
+    private boolean emailExist(Student student) {
+        return studentrepository.existsByEmail(student.getEmail());
     }
 
 
