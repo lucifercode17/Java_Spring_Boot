@@ -46,28 +46,17 @@ public class StudentController {
     @PutMapping("/update")
     public ResponseEntity<UpdateStudentResDto> updateStudent(@RequestParam Long id, @RequestBody UpdateStudentReqDto updateStudentReqDto){
         UpdateStudentResDto studentResp = studentService.updateStudent(id,updateStudentReqDto);
-        if(studentResp == null){
-            return ResponseEntity.status(404).body(null);
-        }
         return ResponseEntity.ok(studentResp);
     }
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteStudent(@RequestParam Long id){
-        Boolean isDeleted = studentService.deleteStudent(id);
-
-        if(!isDeleted){
-            return ResponseEntity.notFound().build();
-        }
+        studentService.deleteStudent(id);
         return ResponseEntity.ok("record deleted");
     }
 
     @PatchMapping("/soft-delete")
     public ResponseEntity<String> softDelete(@RequestParam Long id){
-        Boolean isDeleted = studentService.softDelete(id);
-
-        if(!isDeleted){
-            return ResponseEntity.notFound().build();
-        }
+        studentService.softDelete(id);
         return ResponseEntity.ok("record deleted");
     }
 

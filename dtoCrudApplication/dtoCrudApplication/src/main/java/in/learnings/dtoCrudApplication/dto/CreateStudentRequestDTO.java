@@ -10,9 +10,9 @@ public class CreateStudentRequestDTO {
     @NotNull(message = "enter the age ")
     @Min(value = 18, message ="the age should be greater than 18 ")
     private int age;
-    @NotNull(message = "Email required")
-    @Email(message = "enter the correct Email address")
-    private String Email;
+    @NotNull(message = "email required")
+    @Email(message = "enter the correct email address")
+    private String email;
     @NotNull
     private Integer Roll;
 
@@ -35,11 +35,11 @@ public class CreateStudentRequestDTO {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public Integer getRoll() {
