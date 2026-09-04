@@ -24,7 +24,6 @@ public class StudentService {
     public CreateStudentResponedto createStudent(CreateStudentRequestDTO studentReqdto){
 
        Student student = mapToEntity(studentReqdto);
-        System.out.println(emailExist(student));
         if(emailExist(student)){
 
             throw new DuplicateConflict("this email " +student.getEmail() +" exists");
